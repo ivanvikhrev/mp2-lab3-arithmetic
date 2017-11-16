@@ -28,8 +28,8 @@ public:
     //Функции
 	void push(const T &elem);// вставить элемент 
 	T pop(); // извлечь элемент с вершины 
-	T &getTop() // Просмотр верхнего элемента
-	int getSize() // получить размер стэка
+	T &getTop(); // Просмотр верхнего элемента
+	int getSize(); // получить размер стэка
 	bool isEmpty(); //проверка на пустоту
 	Stack clear(); //очистка
 	 };
@@ -38,26 +38,32 @@ public:
 template <class T> 
 Stack<T>::Stack(int S) : size(S)// инициализация константы?
 {
-	*pStack = new T[size]; // выделяем память под стек
+	if ( size>=0 ) 
+	{
+	pStack = new T[size]; // выделяем память под стек
 	top = 0; // инициализация текущего элемента нулем
+	}
+	else 
+		throw "error";
 }
 //......................................................................
 
 template <class T>
-Stack<T>::Stack(const Stack<T> &StackToCpy) :size(StackToCpy.getSize()) // инициализация константы 
+Stack<T>::Stack(const Stack<T> &StackToCpy) //:size(StackToCpy.getSize()) // инициализация константы 
 {
+	size = StackToCpy.size;
+	top = StackToCpy.top;
 	pStack = new T[size]; //выделяем память под новый стек
-	top = StckToCpy.getTop();
 
 	for (int i = 0; i < top; i++)
-		pStack[i] = StckToCpy.pStack[i];
+		pStack[i] = StackToCpy.pStack[i];
 }
 //......................................................................
 
 template <class T>
 Stack<T>::~Stack()
 {
-	delete[] stackPtr;
+	delete[] pStack;
 }
 //......................................................................
 
@@ -97,16 +103,15 @@ void Stack<T>::push(const T &value)
 	{
 		return size;
 	}
-	template <class T>
 	//......................................................................
-
+	template <class T>
 	bool Stack<T>::isEmpty()
 	{
 		bool check
 			if top < 0
-				check = 1;
+				check = true;
 			else
-				check = 0;
+				check = false;
 		return check;
 	}
 	//......................................................................
