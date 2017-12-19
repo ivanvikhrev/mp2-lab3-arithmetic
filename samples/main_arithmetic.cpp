@@ -3,23 +3,28 @@
 #include  <iostream>
 int main()
 {
-	string Exp, S="YES";
 	
-	while (S == "YES" || S == "yes")
-	{
+	string S = "Y";
+	
+	while (S == "Y" || S == "y")
+	{  
+
+		string Exp = "0";
 		cout << "Pls input expression" << endl;
-		cin >> Exp;
+		getline(cin, Exp);
+		if (Exp == "")
+			getline(cin, Exp);
 		Arithmetic A(Exp);
 		A.DeleteSpaces();
+		A.Minus();
 		A.DivideIntoLexemes();
-		if (A.CheckBracket() && A.CheckLetters() && A.CheckOperators() && A.CheckPoints() )
+		if (A.CheckBrackets() && A.CheckSymbols() && A.CheckOperators() )
 		{
-			//A.DivideIntoLexemes();
 			A.PolishNotation();
 			double res = A.Calculate();
-			cout << res << endl;
+			cout << Exp << " = " << res << endl;
 		}
-		cout << "would you like to continue? YES/NO : ";
+		cout << "Would you like to continue? Y/N : ";
 		cin >> S;
 	}
 

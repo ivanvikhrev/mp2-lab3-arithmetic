@@ -3,7 +3,7 @@
 #include <iostream>
 using std::cin;
 using std::cout;
-
+// унарный минус - добавить ноль перед минусом.
 Lexem::Lexem()
 {
 	type = UNKNOWN;
@@ -101,7 +101,8 @@ void Lexem::inpVar()
 }
 
 Arithmetic::Arithmetic(const string& str)
-{
+{   
+
 	pLexem = new Lexem[str.length()];
 	Str = str;
 	nLexemes = 0;
@@ -263,7 +264,7 @@ double Arithmetic::Calculate()
 	return st.pop();
 }
 
-bool Arithmetic::CheckBracket()
+bool Arithmetic::CheckBrackets()
 {
 	int NBR = 0;
 
@@ -286,14 +287,14 @@ bool Arithmetic::CheckBracket()
 	return flag;
 }
 
-bool Arithmetic::CheckLetters()
+bool Arithmetic::CheckSymbols()
 {
 	bool flag = true;
 	for (int i = 0; i < nLexemes; i++)
 	{
 		if (pLexem[i].type == UNKNOWN)
 		{
-			cout << " FORBIDENN SYMBOLS IN " << i << endl;
+			cout << " FORBIDENN SYMBOLS IN " << i << " lexem" << endl;
 			flag = false;
 		}
 	}
@@ -310,7 +311,7 @@ bool Arithmetic::CheckLetters()
 				}
 				k++;
 			}*/
-			cout << "UNKNOWN SYMBOL in " << i << endl;
+			cout << "UNKNOWN SYMBOL in " << i << " lexem" << endl;
 			//i = i + k;
 			flag = false;
 		}
@@ -329,35 +330,47 @@ bool Arithmetic::CheckOperators()
 			switch (pLexem[i].type)
 			{
 			case NUMBER:
-				if ((pLexem[i + 1].type != CLOSE_BRACKET) || (pLexem[i + 1].type != OPERATOR))
+				if ((pLexem[i + 1].type != CLOSE_BRACKET) && (pLexem[i + 1].type != OPERATOR))
 				{
 					flag = false;
-					cout << "Mistake: OPERATORS IN" << i+1 << endl;
+					cout << "Mistake 0: wrong operator in " << i+1 <<  " lexem" << endl;
+				}
+				break;
+			case VARIABLE:
+				if ((pLexem[i + 1].type != CLOSE_BRACKET) && (pLexem[i + 1].type != OPERATOR))
+				{
+					flag = false;
+					cout << "Mistake 1: wrong operator in " << i + 1 << " lexem" << endl;
 				}
 				break;
 			case OPERATOR:
-				if ((pLexem[i + 1].type != NUMBER) || (pLexem[i + 1].type != CLOSE_BRACKET))
+				if ((pLexem[i + 1].type != NUMBER) && (pLexem[i+1].type != VARIABLE) &&  (pLexem[i + 1].type != OPEN_BRACKET))
 				{
 					flag = false;
-					cout << "Mistake: OPERATORS IN" << i+1<< endl;
+					cout << "Mistake 2: wrong operator in " << i+1 << " lexem" << endl;
 				}
 				break;
 			case OPEN_BRACKET:
-				if ((pLexem[i + 1].type != NUMBER) || (pLexem[i + 1].type != CLOSE_BRACKET) || pLexem[i + 1].OP != '-')
+				if ((pLexem[i + 1].type != NUMBER) && pLexem[i+1].type != VARIABLE &&  (pLexem[i + 1].type != OPEN_BRACKET) && pLexem[i + 1].OP != '-' )  //&& (pLexem[i + 1].type != CLOSE_BRACKET)
 				{
 					flag = false;
-					cout << "Mistake: OPERATORS IN" << i+1 << endl;
+					cout << "Mistake 3: wrong operator in" << i+1 << " lexem" << endl;
 				}
 				break;
 			case CLOSE_BRACKET:
-				if ((pLexem[i + 1].type != CLOSE_BRACKET) || (pLexem[i + 1].type != OPERATOR))
+				if ((pLexem[i + 1].type != CLOSE_BRACKET) && (pLexem[i + 1].type != OPERATOR))
 				{
 					flag = false;
-					cout << "Mistake: OPERATORS IN" << i+1 << endl;
+					cout << "Mistake 4: wrong operator in "  << i+1 << " lexem" << endl;
 				}
 					break;
 			}
 		}
+	}
+	else
+	{
+		flag = false;
+		cout << "Mistake 5: wrong operator in the beginning or in the end"<< endl;
 	}
 
 	return flag;
@@ -375,12 +388,22 @@ void Arithmetic::DeleteSpaces()
 {
 	int A = string::npos;
 	int B = Str.find(' ');
-	while (B != string::npos)
+	while (B != A)
 	{
 		Str.erase(B, 1);
 		B = Str.find(' ');
 	}
-	//nLexemes = Str.length();
+}
+
+void Arithmetic::Minus()
+{    
+	if (Str[0] == '-')
+		Str = "0" + Str;
+	for (int i = 1; i < Str.length(); i++)
+		if (Str[i - 1] == '(' &&  Str[i] == '-')
+			Str.insert(i,"0");
+	delete[] pLexem;
+	pLexem = new Lexem[Str.length()];
 }
 
 

@@ -43,10 +43,12 @@ public:
 	void PolishNotation(); // Перевод в в польскую запись
 	double Calculate(); // вычисление по польской записи
 
-	bool CheckBracket();
-	bool CheckLetters();
+	bool CheckBrackets();
+	bool CheckSymbols();
 	bool CheckOperators();
 	bool CheckPoints();
 	void DeleteSpaces();
+	void Minus();
+
 
 };
