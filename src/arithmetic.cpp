@@ -8,6 +8,9 @@ Lexem::Lexem()
 {
 	type = UNKNOWN;
 	val = 0;
+	OP = ' ';
+	CH = " ";
+
 }
 //..........................................................
 Lexem::Lexem(const char c)
@@ -19,14 +22,16 @@ Lexem::Lexem(const char c)
 		{
 			type = OPEN_BRACKET;
 			val = 0;
-			OP = '0';
+			OP = '(';
+			CH = "(";
 			break;
 		}
 		case ')':
 		{
 			type = CLOSE_BRACKET;
 			val = 0;
-			OP = '0';
+			OP = ')';
+			CH = ")";
 			break;
 		}
 		case '-':
@@ -34,6 +39,7 @@ Lexem::Lexem(const char c)
 			type = OPERATOR;;
 			val = 1;
 			OP = '-';
+			CH = "-";
 			break;
 		}
 		case '+':
@@ -41,6 +47,7 @@ Lexem::Lexem(const char c)
 			type = OPERATOR;;
 			val = 1;
 			OP = '+';
+			CH = "+";
 			break;
 		}
 		case '*':
@@ -48,6 +55,7 @@ Lexem::Lexem(const char c)
 			type = OPERATOR;;
 			val = 2;
 			OP = '*';
+			CH = "*";
 			break;
 		}
 		case '/':
@@ -55,6 +63,7 @@ Lexem::Lexem(const char c)
 			type = OPERATOR;;
 			val = 2;
 			OP = '/';
+			CH = "/";
 			break;
 		}
 		default: type = UNKNOWN;
@@ -66,6 +75,7 @@ Lexem::Lexem(const char c)
 		type = VARIABLE;;
 		//val =  0;
 		OP = c;
+		CH = c;
 	}
 
 }
@@ -76,6 +86,7 @@ Lexem::Lexem(const string& Num)
 	val = stod(Num);
 	type = NUMBER;
 	OP = '0';
+	CH = Num;
 }
 //..........................................................
 Lexem::Lexem(const Lexem &L)

@@ -133,4 +133,16 @@ TEST(Arithmetic, test_can_calculate_correct_expressions_with_doubles)
 	}
 	EXPECT_EQ(true, check);
 }
+TEST(Arithmetic, test_can_divide_into_lexems)
+{
+	bool check = true;
+	Arithmetic A("23+11*(18+44/11)");
+	string CorrectLexems[] = { "23","+","11","*","(","18","+","44","/","11" };
+	for (int i = 0; i < A.getNLexemes(); i++)
+		if (A.getChar(i) != CorrectExpressions[i]) 
+			check = false;
+
+	EXPECT_EQ(true, check);
+
+}
 

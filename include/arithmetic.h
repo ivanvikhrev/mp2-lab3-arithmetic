@@ -14,6 +14,7 @@ struct Lexem
 	LexemTypes type;
 	double val;
 	char OP;
+	string CH;
 
 	Lexem();// конструктор по умолчанию
 
@@ -50,5 +51,7 @@ public:
 	void DeleteSpaces();
 	void Minus();
 
+	string getChar(int i) { return pLexem[i].CH; };
+	int getNLexemes() { return nLexemes; };
 
 };
