@@ -8,8 +8,8 @@ Lexem::Lexem()
 {
 	type = UNKNOWN;
 	val = 0;
-	OP = ' ';
-	CH = " ";
+	OP = '0';
+	CH = "0";
 
 }
 //..........................................................
@@ -94,6 +94,7 @@ Lexem::Lexem(const Lexem &L)
 	val = L.val;
 	type = L.type;
 	OP = L.OP;
+	 CH = L.CH;
 }
 //..........................................................
 Lexem& Lexem::operator=(const Lexem &L)
@@ -101,6 +102,7 @@ Lexem& Lexem::operator=(const Lexem &L)
 	val = L.val;
 	type = L.type;
 	OP = L.OP;
+	CH = L.CH;
 	return *this;
 }
 
@@ -198,7 +200,8 @@ void Arithmetic::PolishNotation()
 				{
 					L = st.pop();
 					PolishN[j++] = L;
-					L = st.getTop();
+					if (!st.isEmpty())
+						L = st.getTop();
 				}
 				st.push(pLexem[i]);
 			}
@@ -237,9 +240,6 @@ double Arithmetic::Calculate()
 		}
 	}
 
-	//for (int i = 0; i < NumPolish; i++)
-		//cout << PolishN[i].OP << ' ' ;
-//	cout << endl;
 
 	for (int i = 0; i < NumPolish; i++)
 	{   
@@ -388,12 +388,6 @@ bool Arithmetic::CheckOperators()
 
 }
 
-bool Arithmetic::CheckPoints()
-{
-	bool flag = true;
-
-	return flag;
-}
 
 void Arithmetic::DeleteSpaces()
 {

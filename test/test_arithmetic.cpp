@@ -14,13 +14,6 @@ string ExpressionsWithDoubles[4] = { "2.0-1.0","14/5", "18.6+1.4", "1.5*1.5" };
 double Result2[4] = { 2.0 - 1.0 ,14.0/5.0 , 18.6 + 1.4, 1.5*1.5 };
 
 
-/*class ArithmTest : public ::testing::Test
-{
-	protected:
-		Arithmetic A;
-
-};*/
-
 TEST(Arithmetic, test_can_check_wrong_operators)
 {
 	bool check=false;
@@ -133,14 +126,67 @@ TEST(Arithmetic, test_can_calculate_correct_expressions_with_doubles)
 	}
 	EXPECT_EQ(true, check);
 }
+
 TEST(Arithmetic, test_can_divide_into_lexems)
 {
 	bool check = true;
-	Arithmetic A("23+11*(18+44/11)");
-	string CorrectLexems[] = { "23","+","11","*","(","18","+","44","/","11" };
+	Arithmetic A("23+11*(18+44/11)"); 
+	A.DivideIntoLexemes();
+	string CorrectLexems[] = { "23","+","11","*","(","18","+","44","/","11", ")"};
 	for (int i = 0; i < A.getNLexemes(); i++)
-		if (A.getChar(i) != CorrectExpressions[i]) 
+	{   
+		string ch1 = A.getChar(i);
+		string ch2 = CorrectLexems[i];
+
+		if (ch1 != ch2)
 			check = false;
+	}
+
+	EXPECT_EQ(true, check);
+
+}
+
+TEST(Arithmetic, test_can_divide_into_polish_lexems)
+{
+	bool check = true;
+	Arithmetic A("(40-10)*3+9");
+	A.DivideIntoLexemes();
+	A.PolishNotation();
+	string CorrectLexems[] = { "40","10","-","3","*","9","+" };
+	for (int i = 0; i < 7; i++)
+	{
+		string ch1 = A.getPolishChar(i);
+		string ch2 = CorrectLexems[i];
+
+		if (ch1 != ch2)
+			check = false;
+	}
+
+	EXPECT_EQ(true, check);
+
+}
+
+TEST(Arithmetic, test_can_delete_spaces)
+{
+	bool check = true;
+	Arithmetic A("  15+11 +22");
+	A.DeleteSpaces();
+	string CorrectExp = "15+11+22";
+	if (A.getExp() != CorrectExp)
+			check = false;
+
+	EXPECT_EQ(true, check);
+
+}
+
+TEST(Arithmetic, test_can_input_0_before_first_minus)
+{
+	bool check = true;
+	Arithmetic A("-11+10");
+	A.Minus();
+	string CorrectExp = "0-11+10";
+	if (A.getExp() != CorrectExp)
+		check = false;
 
 	EXPECT_EQ(true, check);
 

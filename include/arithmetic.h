@@ -11,10 +11,10 @@ const string allOperators = "(-+*/)";
 
 struct Lexem
 {
-	LexemTypes type;
-	double val;
-	char OP;
-	string CH;
+	LexemTypes type; // тип лексемы
+	double val; // числовое значение
+	char OP; // символьное значение
+	string CH = "0"; // сама лексема
 
 	Lexem();// конструктор по умолчанию
 
@@ -23,7 +23,7 @@ struct Lexem
 	Lexem(const Lexem &L);// конструктор копирования
 
 	Lexem& operator=(const Lexem &L);
-	void inpVar();
+	void inpVar(); // ввод значения переменной
     ~Lexem() {};
 };
 
@@ -47,11 +47,12 @@ public:
 	bool CheckBrackets();
 	bool CheckSymbols();
 	bool CheckOperators();
-	bool CheckPoints();
 	void DeleteSpaces();
 	void Minus();
 
 	string getChar(int i) { return pLexem[i].CH; };
+    string getPolishChar(int i) { return PolishN[i].CH; };
+	string getExp() { return Str; };
 	int getNLexemes() { return nLexemes; };
 
 };

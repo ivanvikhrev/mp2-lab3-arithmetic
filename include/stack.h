@@ -20,7 +20,7 @@ protected:
 	int top;   // номер текущего элемента
 public:
 	//конструкторы
-	Stack(int S = 10); 
+	Stack(int S = 10);  
 	Stack(const Stack<T> &St);
 	
 	~Stack(); // деструктор
@@ -28,10 +28,13 @@ public:
     //Функции
 	void push(const T &elem);// вставить элемент 
 	T pop(); // извлечь элемент с вершины 
-	T getTop() const { return pStack[top - 1]; }; // Просмотр верхнего элемента
+
+	T getTop() const { return pStack[top]; }; // Просмотр верхнего элемента
 	int getSize() const { return size; } ; // получить размер стэка
-	bool isEmpty() { return top == 0; }; //проверка на пустоту
-	void clear(); //очистка
+	int NumberTop(); // номер верхнего элемента
+
+	bool isEmpty() const { return top == -1; }; //проверка на пустоту
+	void clear(); //очистка стека 
 	 };
 //Реализация методов 
 
@@ -42,7 +45,7 @@ Stack<T>::Stack(int S)
 	{
 		size = S;
 		pStack = new T[size]; 
-		top = 0; 
+		top = -1; 
 	}
 	else 
 		throw "Wrong Size";
@@ -56,7 +59,7 @@ Stack<T>::Stack(const Stack<T> &St)
 	top = St.top;
 	pStack = new T[size]; //выделяем память под новый стек
 
-	for (int i = 0; i < top; i++)
+	for (int i = 0; i < top+1; i++)
 		pStack[i] = St.pStack[i];
 }
 //......................................................................
@@ -71,20 +74,20 @@ Stack<T>::~Stack()
 template <class T>
 void Stack<T>::push(const T &value)
 {
-	if (top<size)
-		pStack[top++] = value;
+	if (top != size-1)
+		pStack[++top] = value;
 	else
 	{
 		if (size + (size+2)/2 <= MAX_STACK_SIZE) // если size = 0 получим 0+2/2 = 1 ; size = 1 -> 1+ (1+2)/2 = 2
 		{
 			size+=(size + 2) / 2;
 			T* TempStack = new T[size];
-			for (int i = 0; i < top; i++)
+			for (int i = 0; i < top+1; i++)
 				TempStack[i] = pStack[i];
-			TempStack[top++] = value;
+			TempStack[++top] = value;
 			delete[] pStack;
 			pStack = new T[size];
-			for (int i = 0; i < top; i++)
+			for (int i = 0; i < top+1; i++)
 				pStack[i] = TempStack[i];
 			delete[] TempStack;
 		}
@@ -97,7 +100,7 @@ void Stack<T>::push(const T &value)
 	template <class T>
 	T Stack<T>::pop()
 	{   if (!isEmpty())
-			return pStack[--top];
+			return pStack[top--];
 	else
 		throw "Error, Empty Stack";
     }
@@ -107,8 +110,24 @@ void Stack<T>::push(const T &value)
 	template<class T>
 	void Stack<T>::clear()
 	{
-		top = 0;
+		top = -1;
 		for (int i = 0; i < size; i++)
 			pStack[i] = 0;
 
 	}
+	template<class T>
+	int Stack<T> ::NumberTop()
+	{
+		if (!IsEmpty())
+			return pStack[top];
+		else
+			throw 0;
+	}
+	
+	
+	/*bool Stack<T>::operator==(const T &st) const
+	{
+		bool flag = false;
+		if (size==st.size && top == st.top)
+			for (int i=0; i<)
+	}*/
