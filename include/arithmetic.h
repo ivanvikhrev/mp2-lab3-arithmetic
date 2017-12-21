@@ -3,7 +3,8 @@
 #include <string>
 #include "stack.h"
 
-using namespace std;
+
+
 
 enum  LexemTypes { OPEN_BRACKET, CLOSE_BRACKET, OPERATOR, NUMBER, VARIABLE, UNKNOWN };
 

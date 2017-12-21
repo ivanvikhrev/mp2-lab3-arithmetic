@@ -1,8 +1,7 @@
 
 #include "arithmetic.h"
 #include <iostream>
-using std::cin;
-using std::cout;
+
 // унарный минус - добавить ноль перед минусом.
 Lexem::Lexem()
 {
@@ -105,14 +104,14 @@ Lexem& Lexem::operator=(const Lexem &L)
 	CH = L.CH;
 	return *this;
 }
-
+//..........................................................
 void Lexem::inpVar()
 {
 	cout << "Input VARIABLE " << OP << " : ";
 	cin >> val;
 	cout << endl;
 }
-
+//..........................................................
 Arithmetic::Arithmetic(const string& str)
 {   
 
@@ -120,7 +119,7 @@ Arithmetic::Arithmetic(const string& str)
 	Str = str;
 	nLexemes = 0;
 }
-
+//..........................................................
 void Arithmetic::DivideIntoLexemes()
 {
 	for (int i = 0; i < Str.length(); i++)
@@ -154,7 +153,7 @@ void Arithmetic::DivideIntoLexemes()
 					nLexemes++;
 				}
 				else 
-					if (c != ' ')
+					
 					{
 						pLexem[nLexemes].type = UNKNOWN;
 						nLexemes++;
@@ -162,7 +161,7 @@ void Arithmetic::DivideIntoLexemes()
 
 	}
 }
-
+//..........................................................
 void Arithmetic::PolishNotation()
 {    
     
@@ -217,7 +216,7 @@ void Arithmetic::PolishNotation()
 	}
 	NumPolish = j;
 }
-
+//..........................................................
 double Arithmetic::Calculate()
 {
 	Stack<double> st;
@@ -274,7 +273,7 @@ double Arithmetic::Calculate()
 	}
 	return st.pop();
 }
-
+//..........................................................
 bool Arithmetic::CheckBrackets()
 {
 	int NBR = 0;
@@ -297,7 +296,7 @@ bool Arithmetic::CheckBrackets()
 	}
 	return flag;
 }
-
+//..........................................................
 bool Arithmetic::CheckSymbols()
 {
 	bool flag = true;
@@ -313,23 +312,14 @@ bool Arithmetic::CheckSymbols()
 	{
 		if ((pLexem[i].type == VARIABLE) && (pLexem[i + 1].type == VARIABLE))
 		{
-			/*int k = 1;
-			for (int j = i + 2; j < nLexemes - 1; j++)
-			{
-				if (pLexem[j].type != VARIABLE)
-				{
-					j = nLexemes;
-				}
-				k++;
-			}*/
+			
 			cout << "UNKNOWN SYMBOL in " << i << " lexem" << endl;
-			//i = i + k;
 			flag = false;
 		}
 	}
 	return flag;
 }
-
+//..........................................................
 bool Arithmetic::CheckOperators()
 {   
 	bool flag = true;
@@ -387,7 +377,7 @@ bool Arithmetic::CheckOperators()
 	return flag;
 
 }
-
+//..........................................................
 
 void Arithmetic::DeleteSpaces()
 {
@@ -399,7 +389,7 @@ void Arithmetic::DeleteSpaces()
 		B = Str.find(' ');
 	}
 }
-
+//..........................................................
 void Arithmetic::Minus()
 {    
 	if (Str[0] == '-')

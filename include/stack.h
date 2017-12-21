@@ -8,6 +8,9 @@
 // - очистка стека
 // при вставке в полный стек должна перевыделяться память
 
+using namespace std;
+
+
 // Шаблон стека
 const int MAX_STACK_SIZE = 1000;
 
@@ -115,6 +118,7 @@ void Stack<T>::push(const T &value)
 			pStack[i] = 0;
 
 	}
+	//......................................................................
 	template<class T>
 	int Stack<T> ::NumberTop()
 	{

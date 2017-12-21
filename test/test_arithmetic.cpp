@@ -2,130 +2,150 @@
 #include <gtest.h>
 #include "arithmetic.h"
 
+// value parameterized test
+
+
+
 //Ошибочные выражение
 string MistakeInOp[15] = {"10++5", "14+)5","--(15+5)", "(15+5)++", "--15+5" , 
 "15+5++" , "15+5+", "15+", "+15", "(+11-4)","(11-4+)","15A+14","A15+1","5A6", "()" };
 string MistakeInBr[5] = {"11-1)","(11-1", "((11+5)", "A)B", "A(B" };
 string MistakeInLt[4] = { "Aa+4","aaaA", "5&6", "15+16="};
 //Верные выражения
-string CorrectExpressions[6] = { "-1","-11+5","1+1", "-(15+6)*11", "23+11*(18+44/11)","-11*(-8)" };
-double Result1[6] = { -1,-6,2,-(15 + 6) * 11, 23 + 11 * (18 + 44 / 11),-11 * (-8) };
-string ExpressionsWithDoubles[4] = { "2.0-1.0","14/5", "18.6+1.4", "1.5*1.5" };
-double Result2[4] = { 2.0 - 1.0 ,14.0/5.0 , 18.6 + 1.4, 1.5*1.5 };
+string CorrectExpressions[10] = { "-1","-11+5","1+1", "-(15+6)*11", "23+11*(18+44/11)","-11*(-8)","2.0-1.0","14/5", "18.6+1.4", "1.5*1.5" };
+double Result[10] = { -1,-6,2,-(15 + 6) * 11, 23 + 11 * (18 + 44 / 11),-11 * (-8), 2.0 - 1.0 ,14.0 / 5.0 , 18.6 + 1.4, 1.5*1.5 };
 
-
-TEST(Arithmetic, test_can_check_wrong_operators)
+// value parameterized test
+struct Check_test
 {
-	bool check=false;
-	for (int i = 0; i < 15; i++)
+	string str;
+	bool res;
+	double Value;
+	Check_test(string inputExp, bool inputRes)
 	{
-		Arithmetic A(MistakeInOp[i]);
-		A.DeleteSpaces();
-		A.Minus();
-		A.DivideIntoLexemes();
-		cout << "Expression  : " << MistakeInOp[i] << " " ;
-		check = A.CheckOperators();
-		if (check == true) { break;  };
-
+		str = inputExp;
+		res = inputRes;
 	}
-	EXPECT_EQ(false, check);
-}
-TEST(Arithmetic, test_can_check_wrong_brackets)
+	Check_test(string inputExp, double inputValue)
+	{
+		str = inputExp;
+		Value = inputValue;
+	}
+};
+//............................................................................
+
+class Arithm_check_Operators : public ::testing::TestWithParam<Check_test>
 {
-	bool check = false;
-	for (int i = 0; i < 5; i++)
+protected:
+	
+	Arithmetic test;
+		   
+public:
+	
+	Arithm_check_Operators() : test(GetParam().str)
 	{
-		Arithmetic A(MistakeInBr[i]);
-		A.DeleteSpaces();
-		A.Minus();
-		A.DivideIntoLexemes();
-		cout << "Expression  : " << MistakeInOp[i] << " ";
-		check = A.CheckBrackets();
-		if (check == true) { break; }
-
+		test.DeleteSpaces();
+		test.Minus();
+		test.DivideIntoLexemes();
 	}
-	EXPECT_EQ(false, check);
-}
-
-TEST(Arithmetic, test_can_check_wrong_symbols)
+	~Arithm_check_Operators() {}
+};
+//............................................................................
+class Arithm_check_Brackets :  public Arithm_check_Operators
 {
-	bool check = false;
-	for (int i = 0; i < 4; i++)
-	{
-		Arithmetic A(MistakeInLt[i]);
-		A.DeleteSpaces();
-		A.Minus();
-		A.DivideIntoLexemes();
-		cout << "Expression  : " << MistakeInLt[i] << " ";
-		check = A.CheckSymbols();
-		if (check == true) { break; }
-
-	}
-	EXPECT_EQ(false, check);
-}
-TEST(Arithmetic, test_can_calculate_correct_expressions)
+	public:
+		Arithm_check_Brackets() :Arithm_check_Operators()
+		{};
+}; 
+//............................................................................
+class Arithm_check_Symbols: public Arithm_check_Operators
 {
-	bool check = true;
-	for (int i = 0; i < 6; i++)
-	{
-		Arithmetic A(CorrectExpressions[i]);
-		double res = 0;
-		A.DeleteSpaces();
-		A.Minus();
-		A.DivideIntoLexemes();
-		if (A.CheckBrackets() && A.CheckSymbols() && A.CheckOperators())
-		{
-			A.PolishNotation();
-			res = A.Calculate();
-			if (res != Result1[i])
-			{
-				check = false;
-				break;
-			}
-		}
-			else 
-			{
-				check = false; 
-				break;
-			     
-			} 
-		cout << "Expression  : " << CorrectExpressions[i] << "=" << res << endl;
-
-	}
-	EXPECT_EQ(true, check);
-}
-
-TEST(Arithmetic, test_can_calculate_correct_expressions_with_doubles)
+public:
+	Arithm_check_Symbols() :Arithm_check_Operators()
+	{};
+};
+//............................................................................
+TEST_P(Arithm_check_Operators, can_check_wrong_operators)
 {
-	bool check = true;
-	for (int i = 0; i < 4; i++)
-	{
-		Arithmetic A(ExpressionsWithDoubles[i]);
-		double res = 0;
-		A.DeleteSpaces();
-		A.Minus();
-		A.DivideIntoLexemes();
-		if (A.CheckBrackets() && A.CheckSymbols() && A.CheckOperators())
-		{
-			A.PolishNotation();
-			res = A.Calculate();
-			if (res != Result2[i])
-			{
-				check = false;
-				break;
-			}
-		}
-		else
-		{
-			check = false;
-			break;
-
-		}
-		cout << "Expression  : " << ExpressionsWithDoubles[i] << "=" << res << endl;
-
-	}
-	EXPECT_EQ(true, check);
+	EXPECT_EQ (GetParam().res, test.CheckOperators());
 }
+//............................................................................
+INSTANTIATE_TEST_CASE_P(FirstCase, Arithm_check_Operators, ::testing::Values(
+	Check_test(MistakeInOp[0], false),
+	Check_test(MistakeInOp[1], false),
+	Check_test(MistakeInOp[2], false),
+	Check_test(MistakeInOp[3], false),
+	Check_test(MistakeInOp[4], false),
+	Check_test(MistakeInOp[5], false),
+	Check_test(MistakeInOp[6], false),
+	Check_test(MistakeInOp[7], false),
+	Check_test(MistakeInOp[8], false),
+	Check_test(MistakeInOp[9], false),
+	Check_test(MistakeInOp[10], false),
+	Check_test(MistakeInOp[11], false),
+	Check_test(MistakeInOp[12], false),
+	Check_test(MistakeInOp[13], false),
+	Check_test(MistakeInOp[14], false)
+	));
+//........................................................................
+
+TEST_P(Arithm_check_Brackets, test_can_check_wrong_brackets )
+{   
+	
+	EXPECT_EQ(GetParam().res, test.CheckBrackets());
+}
+//............................................................................
+INSTANTIATE_TEST_CASE_P(SecondCase, Arithm_check_Brackets, ::testing::Values(
+	Check_test(MistakeInBr[0], false),
+	Check_test(MistakeInBr[1], false),
+	Check_test(MistakeInBr[2], false),
+	Check_test(MistakeInBr[3], false),
+	Check_test(MistakeInBr[4], false)
+));
+//............................................................................
+TEST_P(Arithm_check_Symbols, test_can_check_wrong_Symbols)
+{
+
+	EXPECT_EQ(GetParam().res, test.CheckSymbols());
+}
+//............................................................................
+INSTANTIATE_TEST_CASE_P(SecondCase, Arithm_check_Symbols, ::testing::Values(
+	
+	Check_test(MistakeInLt[0], false),
+	Check_test(MistakeInLt[1], false),
+	Check_test(MistakeInLt[2], false),
+	Check_test(MistakeInLt[3], false)
+));
+//............................................................................
+class Arithm_check_Calculate : public Arithm_check_Operators
+{
+public:
+	Arithm_check_Calculate() :Arithm_check_Operators()
+	{
+		test.PolishNotation();
+	};
+};
+//............................................................................
+TEST_P(Arithm_check_Calculate, test_can_calculate_correct_expressions)
+{
+
+	EXPECT_EQ(GetParam().Value, test.Calculate());
+}
+//............................................................................
+INSTANTIATE_TEST_CASE_P(SecondCase, Arithm_check_Calculate, ::testing::Values(
+
+	Check_test(CorrectExpressions[0], Result[0]),
+	Check_test(CorrectExpressions[1], Result[1]),
+	Check_test(CorrectExpressions[2], Result[2]),
+	Check_test(CorrectExpressions[3], Result[3]),
+	Check_test(CorrectExpressions[4], Result[4]),
+	Check_test(CorrectExpressions[5], Result[5]),
+	Check_test(CorrectExpressions[6], Result[6]),
+	Check_test(CorrectExpressions[7], Result[7]),
+	Check_test(CorrectExpressions[8], Result[8]),
+	Check_test(CorrectExpressions[9], Result[9])
+));
+//............................................................................
 
 TEST(Arithmetic, test_can_divide_into_lexems)
 {
@@ -145,7 +165,7 @@ TEST(Arithmetic, test_can_divide_into_lexems)
 	EXPECT_EQ(true, check);
 
 }
-
+//............................................................................
 TEST(Arithmetic, test_can_divide_into_polish_lexems)
 {
 	bool check = true;
@@ -165,7 +185,7 @@ TEST(Arithmetic, test_can_divide_into_polish_lexems)
 	EXPECT_EQ(true, check);
 
 }
-
+//............................................................................
 TEST(Arithmetic, test_can_delete_spaces)
 {
 	bool check = true;
@@ -178,7 +198,7 @@ TEST(Arithmetic, test_can_delete_spaces)
 	EXPECT_EQ(true, check);
 
 }
-
+//............................................................................
 TEST(Arithmetic, test_can_input_0_before_first_minus)
 {
 	bool check = true;
