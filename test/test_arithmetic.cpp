@@ -70,7 +70,7 @@ TEST_P(Arithm_check_Operators, can_check_wrong_operators)
 	EXPECT_EQ (GetParam().res, test.CheckOperators());
 }
 //............................................................................
-INSTANTIATE_TEST_CASE_P(FirstCase, Arithm_check_Operators, ::testing::Values(
+INSTANTIATE_TEST_CASE_P(First, Arithm_check_Operators, ::testing::Values(
 	Check_test(MistakeInOp[0], false),
 	Check_test(MistakeInOp[1], false),
 	Check_test(MistakeInOp[2], false),
@@ -95,7 +95,7 @@ TEST_P(Arithm_check_Brackets, test_can_check_wrong_brackets )
 	EXPECT_EQ(GetParam().res, test.CheckBrackets());
 }
 //............................................................................
-INSTANTIATE_TEST_CASE_P(SecondCase, Arithm_check_Brackets, ::testing::Values(
+INSTANTIATE_TEST_CASE_P(Second, Arithm_check_Brackets, ::testing::Values(
 	Check_test(MistakeInBr[0], false),
 	Check_test(MistakeInBr[1], false),
 	Check_test(MistakeInBr[2], false),
@@ -109,7 +109,7 @@ TEST_P(Arithm_check_Symbols, test_can_check_wrong_Symbols)
 	EXPECT_EQ(GetParam().res, test.CheckSymbols());
 }
 //............................................................................
-INSTANTIATE_TEST_CASE_P(SecondCase, Arithm_check_Symbols, ::testing::Values(
+INSTANTIATE_TEST_CASE_P(Third, Arithm_check_Symbols, ::testing::Values(
 	
 	Check_test(MistakeInLt[0], false),
 	Check_test(MistakeInLt[1], false),
@@ -132,7 +132,7 @@ TEST_P(Arithm_check_Calculate, test_can_calculate_correct_expressions)
 	EXPECT_EQ(GetParam().Value, test.Calculate());
 }
 //............................................................................
-INSTANTIATE_TEST_CASE_P(SecondCase, Arithm_check_Calculate, ::testing::Values(
+INSTANTIATE_TEST_CASE_P(Fourth, Arithm_check_Calculate, ::testing::Values(
 
 	Check_test(CorrectExpressions[0], Result[0]),
 	Check_test(CorrectExpressions[1], Result[1]),
